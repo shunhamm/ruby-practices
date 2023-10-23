@@ -20,12 +20,19 @@ def files(path)
 end
 
 def transform_by_option(files, option, path)
-  filtered_files = files.reject { |file| file.start_with?('.') }
+  # aオプションのみの場合に引数を変更しないで返すためnew_filesに再定義している。
+  new_files = if option[:a]
+                files
+              else
+                files.reject { |file| file.start_with?('.') }
+              end
+
+  new_files = new_files.reverse if option[:r]
 
   if option[:l]
-    file_stats(path, filtered_files)
+    file_stats(new_files, path)
   else
-    filtered_files
+    new_files
   end
 end
 
@@ -58,7 +65,7 @@ def file_type(file_lstat)
   end
 end
 
-def file_stats(path, file_names)
+def file_stats(file_names, path)
   file_stats = []
   max_size_length = 0
 
