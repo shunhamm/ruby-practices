@@ -14,7 +14,7 @@ def main
   opt.parse!(ARGV)
   path = ARGV[0].nil? ? '.' : ARGV[0]
   files = files(path)
-  transformed_files = transform_files_by_option(files, option, path)
+  transformed_files = transform_by_option(files, option, path)
 
   if option[:l]
     transformed_files.each { |files| puts files }
