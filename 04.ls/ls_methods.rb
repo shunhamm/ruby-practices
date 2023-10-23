@@ -19,7 +19,7 @@ def files(path)
   Dir.entries(path).sort
 end
 
-def transform_files_for_long_format(files, option, path)
+def transform_files_by_option(files, option, path)
   filtered_files = files.reject { |file| file.start_with?('.') }
 
   if option[:l]
