@@ -68,21 +68,22 @@ end
 def file_stats(file_names, path)
   file_stats = []
   max_size_length = 0
+  total_file_blocks = 0
 
   file_names.each do |file_name|
     outfile = File.join(path, file_name)
     fs = File::Stat.new(outfile)
-    size_length = fs.size.to_s.length
-    max_size_length = size_length if size_length > max_size_length
+    max_size_length = fs.size.to_s.length if fs.size.to_s.length > max_size_length
     file_type = file_type(File.lstat(outfile)) # File::Statは自動的にシンボリックリンクをたどっていき常にfalseを返すのでlstatを渡す。
     octal_mode = fs.mode.to_s(8).rjust(6, '0')
     mode = "#{PERMISSION_MAP[octal_mode[3]]}#{PERMISSION_MAP[octal_mode[4]]}#{PERMISSION_MAP[octal_mode[5]]}"
     time = fs.mtime.strftime('%m %d %H:%M ')
     file_stats << [file_type + mode, fs.nlink.to_s.rjust(2), Etc.getpwuid(fs.uid).name, Etc.getgrgid(fs.gid).name, fs.size.to_s, time, file_name]
+    total_file_blocks += fs.blocks
   end
 
   # 最大文字列長に合わせて整形
-  formatted_file_stats = []
+  formatted_file_stats = [total_file_blocks]
   file_stats.each do |s|
     s[4] = s[4].rjust(max_size_length + 1)
     formatted_file_stats << s.join(' ')
