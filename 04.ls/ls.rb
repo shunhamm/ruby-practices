@@ -14,13 +14,13 @@ def main
   opt.parse!(ARGV)
   path = ARGV[0].nil? ? '.' : ARGV[0]
   files = files(path)
-  new_files = transform_by_option(files, option, path)
+  transformed_files = transform_by_option(files, option, path)
 
   if option[:l]
-    puts "total #{new_files[0]}"
-    new_files[1..].each { |files| puts files }
+    puts "total #{transformed_files[0]}"
+    transformed_files[1..].each { |files| puts files }
   else
-    show_as_grid(new_files)
+    show_as_grid(transformed_files)
   end
 end
 main

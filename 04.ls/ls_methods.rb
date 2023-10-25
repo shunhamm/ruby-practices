@@ -21,18 +21,18 @@ end
 
 def transform_by_option(files, option, path)
   # aオプションのみの場合に引数を変更しないで返すためnew_filesに再定義している。
-  new_files = if option[:a]
-                files
-              else
-                files.reject { |file| file.start_with?('.') }
-              end
+  transformed_files = if option[:a]
+                        files
+                      else
+                        files.reject { |file| file.start_with?('.') }
+                      end
 
-  new_files = new_files.reverse if option[:r]
+  transformed_files = transformed_files.reverse if option[:r]
 
   if option[:l]
-    file_stats(new_files, path)
+    file_stats(transformed_files, path)
   else
-    new_files
+    transformed_files
   end
 end
 
