@@ -15,13 +15,12 @@ class Game
   def score
     game_score = 0
     @frames.first(NORMAL_FRAME).each_with_index do |frame, i|
-      game_score += if frame.strike?
-                      frame.score + Frame.strike_bonus_score(@frames[i + 1], @frames[i + 2])
-                    elsif frame.spare?
-                      frame.score + Frame.spare_bonus_score(@frames[i + 1])
-                    else
-                      frame.score
-                    end
+      game_score += frame.score
+      if frame.strike?
+        game_score += Frame.strike_bonus_score(@frames[i + 1], @frames[i + 2])
+      elsif frame.spare?
+        game_score += Frame.spare_bonus_score(@frames[i + 1])
+      end
     end
     game_score += @frames.last.score
     game_score
