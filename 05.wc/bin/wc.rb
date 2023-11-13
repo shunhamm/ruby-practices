@@ -21,7 +21,6 @@ end
 def fetch_file_names
   file_names = []
   ARGF.each do |line|
-    # lsのlオプションの有無に関わらずファイル名のみを取得出来るように加工する
     file_names << line.chomp.split.last if line.include? '.txt'
   end
   file_names
