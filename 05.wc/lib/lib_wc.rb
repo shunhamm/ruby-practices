@@ -4,10 +4,10 @@ SPACE_NUMBER = 8
 
 def run_wc(file_names, option)
   option = { lines: true, words: true, bytes: true } if option.empty? # wcコマンドが何もオプションを持たない場合、全てのオプションを指定したことにしている。
-  file_names.size > 1 ? wc_for_multiple_files(file_names, option) : wc_for_single_file(file_names[0], option)
+  wc(file_names, option)
 end
 
-def wc_for_multiple_files(file_names, option)
+def wc(file_names, option)
   wc = []
   total_file_data = { lines: 0, words: 0, bytes: 0 }
 
@@ -19,15 +19,11 @@ def wc_for_multiple_files(file_names, option)
     body = render_body(file_data, option)
     wc << [body, file].join(' ')
   end
-  total = "#{render_body(total_file_data, option)} total"
-  wc << total
+  if file_names.size > 1
+    total = "#{render_body(total_file_data, option)} total"
+    wc << total
+  end
   wc.join("\n")
-end
-
-def wc_for_single_file(file_name, option)
-  file_data = build_file_data(File.new(file_name).read)
-  body = render_body(file_data, option)
-  [body, file_name].join(' ')
 end
 
 def build_file_data(file_content)
