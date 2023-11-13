@@ -19,13 +19,13 @@ class Frame
     !strike? && [@first_shot.score, @second_shot.score].sum == 10
   end
 
-  def score
+  def shots_score_sum
     return [@first_shot.score, @second_shot.score, @third_shot.score].sum if @third_shot
 
     [@first_shot.score, @second_shot.score].sum
   end
 
-  def self.strike_bonus_score(next_frame, following_frame = nil)
+  def self.strike_bonus_score_in_normal_frame(next_frame, following_frame = nil)
     if next_frame.first_shot.mark == 'X' && following_frame
       next_frame.first_shot.score + next_frame.second_shot.score + following_frame.first_shot.score
     else
@@ -33,7 +33,7 @@ class Frame
     end
   end
 
-  def self.spare_bonus_score(next_frame)
+  def self.spare_bonus_score_in_normal_frame(next_frame)
     next_frame.first_shot.score
   end
 end
