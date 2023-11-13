@@ -13,9 +13,7 @@ def wc(file_names, option)
 
   file_names.each do |file|
     file_data = build_file_data(File.new(file).read)
-    total_file_data[:lines] += file_data[:lines]
-    total_file_data[:words] += file_data[:words]
-    total_file_data[:bytes] += file_data[:bytes]
+    %i[lines words bytes].each { |key| total_file_data[key] += file_data[key] }
     body = render_body(file_data, option)
     wc << [body, file].join(' ')
   end
@@ -36,8 +34,6 @@ end
 
 def render_body(file_data, options)
   body = []
-  body << file_data[:lines].to_s.rjust(SPACE_NUMBER) if options[:lines]
-  body << file_data[:words].to_s.rjust(SPACE_NUMBER) if options[:words]
-  body << file_data[:bytes].to_s.rjust(SPACE_NUMBER) if options[:bytes]
+  %i[lines words bytes].each { |key| body << file_data[key].to_s.rjust(SPACE_NUMBER) if options[key] }
   body.join
 end
