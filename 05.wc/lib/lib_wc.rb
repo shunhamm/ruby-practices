@@ -33,7 +33,5 @@ def build_file_data(file_content)
 end
 
 def render_body(file_data, options)
-  body = []
-  %i[lines words bytes].each { |key| body << file_data[key].to_s.rjust(SPACE_NUMBER) if options[key] }
-  body.join
+  %i[lines words bytes].map { |key| file_data[key].to_s.rjust(SPACE_NUMBER) if options[key] }.join
 end

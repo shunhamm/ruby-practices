@@ -19,11 +19,7 @@ def main
 end
 
 def fetch_file_names
-  file_names = []
-  ARGF.each do |line|
-    file_names << line.chomp.split.last if line.include? '.txt'
-  end
-  file_names
+  ARGF.map { |line| line.chomp.split.last if line.include? '.txt' }.compact
 end
 
 main
