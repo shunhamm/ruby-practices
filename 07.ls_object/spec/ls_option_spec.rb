@@ -10,33 +10,28 @@ describe LsOption do
         @ls_option = LsOption.new([])
       end
       it 'has an empty options hash' do
-        %w[l a r].each do |option|
-          expect(@ls_option.is_option_set(option)).to be false
+        %w[-l -a -r].each do |option|
+          expect(@ls_option.option_set?(option)).to be false
         end
       end
     end
 
     context 'when valid arguments are given' do
       before do
-        args = '-arl'
+        args = ['-a', '-r', '-l']
         @ls_option = LsOption.new(args)
       end
       it 'has the options correctly' do
-        %w[l a r].each do |option|
-          expect(@ls_option.is_option_set(option)).to be true
+        %w[-l -a -r].each do |option|
+          expect(@ls_option.option_set?(option)).to be true
         end
       end
     end
 
     context 'when invalid arguments are given' do
-      before do
-        args = '-wxm'
-        @ls_option = LsOption.new(args)
-      end
-      it 'has the options correctly' do
-        %w[l a r].each do |option|
-          expect(@ls_option.is_option_set(option)).to be false
-        end
+      it 'returns an error' do
+        args = ['-x']
+        expect { @ls_option = LsOption.new(args) }.to raise_error(OptionParser::InvalidOption)
       end
     end
   end
