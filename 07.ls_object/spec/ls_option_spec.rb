@@ -3,8 +3,8 @@
 require 'spec_helper'
 require_relative '../lib/ls_option'
 
-describe LsOption do
-  describe '#parse_options' do
+describe LsOption do # rubocop:disable all
+  describe '#parse_options' do # rubocop:disable all
     context 'when no arguments are given' do
       before do
         @ls_option = LsOption.new([])
