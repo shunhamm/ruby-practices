@@ -7,9 +7,9 @@ classDiagram
     }
 
     class FileMetaData {
-        -String name
-        -DateTime lastModified
-        -Integer size
+        +String name
+        +DateTime lastModified
+        +Integer size
         +String permissions
         +String owner
         +String group
@@ -17,8 +17,8 @@ classDiagram
 
     class LsOption {
         -Hash options
-        +void parse_options(Array~String~ args)
         +boolean is_option_set(String option)
+        -void parse_options(Array~String~ args)
     }
 
     class LsCommand {
