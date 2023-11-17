@@ -1,0 +1,43 @@
+# frozen_string_literal: true
+
+require 'spec_helper'
+require_relative '../lib/ls_option'
+
+describe LsOption do
+  describe '#parse_options' do
+    context 'when no arguments are given' do
+      before do
+        @ls_option = LsOption.new([])
+      end
+      it 'has an empty options hash' do
+        %w[l a r].each do |option|
+          expect(@ls_option.is_option_set(option)).to be false
+        end
+      end
+    end
+
+    context 'when valid arguments are given' do
+      before do
+        args = '-arl'
+        @ls_option = LsOption.new(args)
+      end
+      it 'has the options correctly' do
+        %w[l a r].each do |option|
+          expect(@ls_option.is_option_set(option)).to be true
+        end
+      end
+    end
+
+    context 'when invalid arguments are given' do
+      before do
+        args = '-wxm'
+        @ls_option = LsOption.new(args)
+      end
+      it 'has the options correctly' do
+        %w[l a r].each do |option|
+          expect(@ls_option.is_option_set(option)).to be false
+        end
+      end
+    end
+  end
+end
