@@ -28,7 +28,7 @@ classDiagram
         -Array~String~ build_ls()
         -Array~String~ sort_files(Array~String~ files)
         -Array~String~ filter_files(Array~String~ files)
-        -String format_file_list(Array~String~ files)
+        -Array~String~ format_file_list(Array~FileMetaData~ fileData)
     }
 
     Path "1" -- "1" LsCommand: uses
