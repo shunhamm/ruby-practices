@@ -18,7 +18,7 @@ describe LsOption do # rubocop:disable all
 
     context 'when valid arguments are given' do
       before do
-        args = ['-a', '-r', '-l']
+        args = ['-a', '-r', '-l', 'path_name']
         @ls_option = LsOption.new(args)
       end
       it 'has the options correctly' do
@@ -30,7 +30,7 @@ describe LsOption do # rubocop:disable all
 
     context 'when invalid arguments are given' do
       it 'returns an error' do
-        args = ['-x']
+        args = ['-x', 'path_name']
         expect { @ls_option = LsOption.new(args) }.to raise_error(OptionParser::InvalidOption)
       end
     end
