@@ -17,7 +17,7 @@ class LsOption
       opts.on('-l') { @options['-l'] = true }
       opts.on('-a') { @options['-a'] = true }
       opts.on('-r') { @options['-r'] = true }
-    end.parse!(args)
+    end.parse(args)
   rescue OptionParser::InvalidOption => e
     raise e, '適切なオプションを指定して下さい。'
   end
