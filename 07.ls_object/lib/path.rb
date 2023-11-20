@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Path
-  def initialize(argv = nil)
-    @path = argv || '.'
+  def initialize(path = nil)
+    @path = path || '.'
   end
 
   def files
