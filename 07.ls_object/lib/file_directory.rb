@@ -30,6 +30,7 @@ class FileDirectory
     raise e, "#{@path} ディレクトリが存在しません。"
   end
 
+  # lsコマンドのlオプションで使用するファイルの詳細情報を持つFileMetaDataを返す
   def get_file_metadata(file_name)
     file_path = File.join(@path, file_name)
     stat = File.lstat(file_path)
@@ -44,6 +45,8 @@ class FileDirectory
       last_modified: stat.mtime
     )
   end
+
+  private
 
   def file_type(lstat)
     if lstat.file?
@@ -61,6 +64,7 @@ class FileDirectory
     end
   end
 
+  # ファイル権限を drwxr-xr-x のような記号に変換
   def format_permissions(mode)
     octal_mode = mode.to_s(8).rjust(6, '0')
     "#{PERMISSION_MAP[octal_mode[OWNER_INDEX]]}#{PERMISSION_MAP[octal_mode[GROUP_INDEX]]}#{PERMISSION_MAP[octal_mode[OTHERS_INDEX]]}"
