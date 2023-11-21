@@ -14,6 +14,7 @@ class LsOption
 
   private
 
+  # ユーザー引数を解析し、lsコマンドのオプションが含まれる場合の処理を行う
   def parse(args)
     options_to_set = {
       '-l' => 'l',
