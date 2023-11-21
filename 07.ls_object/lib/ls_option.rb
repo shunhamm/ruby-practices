@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
+require 'optparse'
+
 class LsOption
-  def initialize(args = ARGV)
+  def initialize(args)
     @options = {}
-    parse(args)
+    parse(args) unless args.empty?
   end
 
   def option_set?(option)
