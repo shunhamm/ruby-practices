@@ -6,7 +6,7 @@ require_relative 'ls_option'
 require_relative 'file_directory'
 
 class LsCommand
-  COLUMN_NUM = 3
+  COLUMN_NUM = 3 # lsの結果表示は最大３列である
   SIZE_PADDING_NUM = 3
 
   def initialize(argv)
@@ -21,6 +21,8 @@ class LsCommand
     @option.option_set?('l') ? show_detailed_list(prepared_files) : show_simple_list(prepared_files)
   end
 
+  private
+
   def show_detailed_list(prepared_files)
     prepared_files.each { |files| puts files }
   end
@@ -29,6 +31,11 @@ class LsCommand
     maximum_length = prepared_files.max_by(&:length).length + SIZE_PADDING_NUM # 本家lsコマンドに寄せたスペース幅に調整
     height = prepared_files.length.ceildiv(COLUMN_NUM)
 
+    # 1 5 9
+    # 2 6 10
+    # 3 7
+    # 4 8
+    # 上記の様にファイル名を順番に表示する
     (0...height).each do |h_num|
       COLUMN_NUM.times do |w_num|
         files_index = h_num + (height * w_num)
@@ -39,12 +46,18 @@ class LsCommand
   end
 
   def prepare_file_list(file_names)
-    transformed_files = file_names
+    # オプションを追加したらここに記載する。
+    operations = {
+      'r' => method(:sort_files),
+      'l' => method(:format_file_list)
+    }
 
-    transformed_files = filter_files(transformed_files) unless @option.option_set?('a')
-    transformed_files = sort_files(transformed_files) if @option.option_set?('r')
-    transformed_files = format_file_list(transformed_files) if @option.option_set?('l')
+    # file_namesはhiddenfileをすでに含んでいるので最初にフィルターの処理を行う。
+    transformed_files = @option.option_set?('a') ? file_names : filter_files(file_names)
 
+    operations.each do |option, operation|
+      transformed_files = operation.call(transformed_files) if @option.option_set?(option)
+    end
     transformed_files
   end
 
@@ -57,28 +70,29 @@ class LsCommand
   end
 
   def format_file_list(file_names)
-    max_size_length = calculate_max_size_length(file_names)
-    total_file_blocks = calculate_total_file_blocks(file_names)
+    max_size_length, total_blocks = calculate_max_size_length_and_total_blocks(file_names)
 
     file_stats = file_names.map do |file_name|
       format_single_file_stat(file_name, max_size_length)
     end
 
-    formatted_file_stats = ["total #{total_file_blocks}"]
+    formatted_file_stats = ["total #{total_blocks}"]
     file_stats.each { |stat| formatted_file_stats << stat.join(' ') }
     formatted_file_stats
   end
 
-  def calculate_max_size_length(file_names)
-    file_names.map do |file_name|
-      File::Stat.new(File.join(@file_directory.path, file_name)).size.to_s.length
-    end.max
-  end
+  def calculate_max_size_length_and_total_blocks(file_names)
+    max_size_length = 0
+    total_blocks = 0
 
-  def calculate_total_file_blocks(file_names)
-    file_names.sum do |file_name|
-      File::Stat.new(File.join(@file_directory.path, file_name)).blocks
+    file_names.each do |file_name|
+      stat = File::Stat.new(File.join(@file_directory.path, file_name))
+      size_length = stat.size.to_s.length
+      max_size_length = size_length if size_length > max_size_length
+      total_blocks += stat.blocks
     end
+
+    [max_size_length, total_blocks]
   end
 
   def format_single_file_stat(file_name, max_size_length)
@@ -88,7 +102,7 @@ class LsCommand
       file_detail_data.links.to_s.rjust(1),
       file_detail_data.owner,
       file_detail_data.group,
-      file_detail_data.size.to_s.rjust(max_size_length + 1),
+      file_detail_data.size.to_s.rjust(max_size_length + 1), # １を足してテストフォーマットに合う様にする
       file_detail_data.last_modified.strftime('%m %d %H:%M'),
       file_name
     ]
