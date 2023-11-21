@@ -1,6 +1,6 @@
 ```mermaid
 classDiagram
-    class Path {
+    class FileDirectory {
         -String path
         +Array~String~ files()
         +FileMetaData get_file_metadata(String filename)
@@ -23,7 +23,7 @@ classDiagram
 
     class LsCommand {
         -LsOption options
-        -Array~Path~ paths
+        -FileDirectory fileDirectory
         +void show_ls()
         -Array~String~ build_ls()
         -Array~String~ sort_files(Array~String~ files)
@@ -31,6 +31,6 @@ classDiagram
         -Array~String~ format_file_list(Array~FileMetaData~ fileData)
     }
 
-    Path "1" -- "1" LsCommand: uses
-    FileMetaData "1" -- "*" Path: has
+    FileDirectory "1" -- "1" LsCommand: uses
+    FileMetaData "1" -- "*" FileDirectory: creates
     LsOption "1" -- "1" LsCommand: uses
