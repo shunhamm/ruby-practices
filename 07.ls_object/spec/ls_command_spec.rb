@@ -52,6 +52,25 @@ describe LsCommand do
       end
     end
 
+    context 'when [l, a, r] options are given' do
+      before do
+        argv = ['-lar', 'spec/fixtures/dummy_files']
+        @ls_commnad = LsCommand.new(argv)
+      end
+
+      it 'shows file names, including hidden files, sorted in reverse order with file details.' do
+        expect { @ls_commnad.run_ls }.to output(<<~HEREDOC).to_stdout
+          total 0
+          drwxr-xr-x 2 shunhamm staff   64 11 17 10:18 dummy_dir
+          -rw-r--r-- 1 shunhamm staff    0 11 17 10:18 dummy_1.txt
+          -rw-r--r-- 1 shunhamm staff    0 11 17 10:18 dummy2.txt
+          -rw-r--r-- 1 shunhamm staff    0 11 17 10:18 dummy
+          drwxr-xr-x 3 shunhamm staff   96 11 17 10:18 ..
+          drwxr-xr-x 6 shunhamm staff  192 11 17 10:20 .
+        HEREDOC
+      end
+    end
+
     context 'when any option is not given' do
       before do
         argv = ['spec/fixtures/dummy_files']
