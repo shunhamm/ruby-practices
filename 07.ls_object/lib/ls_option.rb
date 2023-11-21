@@ -27,6 +27,6 @@ class LsOption
       end
     end.parse!(args)
   rescue OptionParser::InvalidOption => e
-    raise e, '適切なオプションを指定して下さい。'
+    raise e, '無効なオプションです。使用可能なオプション: -l, -a, -r'
   end
 end

@@ -27,7 +27,7 @@ class FileDirectory
   def files
     Dir.entries(@path).sort
   rescue Errno::ENOENT => e
-    raise e, "Path not found: #{@path}"
+    raise e, "#{@path} ディレクトリが存在しません。"
   end
 
   def get_file_metadata(file_name)
