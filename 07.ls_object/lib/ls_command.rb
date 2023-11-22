@@ -102,7 +102,7 @@ class LsCommand
       file_detail_data.links.to_s.rjust(1),
       file_detail_data.owner,
       file_detail_data.group,
-      file_detail_data.size.to_s.rjust(max_size_length + 1), # １を足してテストフォーマットに合う様にする
+      file_detail_data.size.to_s.rjust(max_size_length + 1), # テストフォーマットはファイル名の最大文字数に１を足した数の文字の幅にする
       file_detail_data.last_modified.strftime('%m %d %H:%M'),
       file_name
     ]
