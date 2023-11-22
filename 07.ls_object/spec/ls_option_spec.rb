@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require_relative 'spec_helper'
 require_relative '../lib/ls_option'
 
 describe LsOption do # rubocop:disable all
